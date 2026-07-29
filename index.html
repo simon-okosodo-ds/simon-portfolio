@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Simon Okosodo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14161B;
+    --paper:#FAF9F5;
+    --cobalt:#2B3EFF;
+    --muted:#6E6E68;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:24px;
+  }
+  .mark{
+    width:64px; height:64px;
+    border-radius:8px;
+    background:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 24px;
+  }
+  .mark span{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:32px;
+    color:var(--cobalt);
+  }
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:clamp(28px, 6vw, 44px);
+    letter-spacing:-0.02em;
+    margin-bottom:8px;
+  }
+  p{
+    color:var(--muted);
+    font-size:16px;
+  }
+</style>
+</head>
+<body>
+  <div>
+    <div class="mark"><span>S</span></div>
+    <h1>Simon Okosodo</h1>
+    <p>Portfolio launching soon.</p>
+  </div>
+</body>
+</html>
