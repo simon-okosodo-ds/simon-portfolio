@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Case Study — FlyRank Content Refresh | Simon Okosodo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a href="index.html" class="nav-mark"><span class="sq"><span>S</span></span> Simon Okosodo</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="case-study.html" class="active">Case Study</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <section>
+    <p class="eyebrow">Case Study</p>
+    <h1>FlyRank Content Refresh — Diagnosis Before Action</h1>
+  </section>
+
+  <section>
+    <h2>The problem</h2>
+    <p>FlyRank's existing system flags "declining" pages using one blunt rule. It can't tell the difference between a page that genuinely needs a rewrite and a page that's actually fine — it just stopped getting clicks because Google now answers the question directly on the results page. A page not getting clicks doesn't mean it's not doing great.</p>
+  </section>
+
+  <section>
+    <h2>What I did — and decided</h2>
+    <p>I combined two of the project's four predefined lanes into one queue instead of picking a single one, because "which pages need review" and "why they're underperforming" are really one question, not two. The core decision: diagnosis before action. I treated wasted editor time — someone rewriting a page that was never the problem — as the costlier mistake to guard against, over missing a real decliner. And when I found a pattern that looked like it could explain the "clicks fine, impressions falling" cases, I called it what it is: a proxy, not proof.</p>
+
+    <img src="images/task-framing.png" alt="Real notebook output showing the ML task framing: 30,000 rows, 32 clients, ranking and diagnosis task types" class="screenshot">
+    <p class="screenshot-caption">Real notebook output — task framing (ML-03), run against the actual starter dataset.</p>
+  </section>
+
+  <section>
+    <h2>What came of it</h2>
+    <p>1,111 pages (3.7%) show the "impressions fine, clicks falling" pattern — and none of them are caught by the existing "declining" label. That's a real gap in the current system, not a guess.</p>
+
+    <img src="images/diagnostic-finding.png" alt="Real notebook output showing the diagnostic segment code and its result: 1,111 pages, 3.7%, 0% caught by the existing decline label" class="screenshot">
+    <p class="screenshot-caption">Real notebook output — the diagnostic segment, checked directly against the data.</p>
+  </section>
+
+  <section>
+    <h2>Before / after: my editing voice</h2>
+    <div class="before-after">
+      <div class="block">
+        <div class="label">Before (generic AI line)</div>
+        <p>"This solution leverages advanced analytics to drive significant improvements in content performance, delivering measurable, results-driven impact for the business."</p>
+      </div>
+      <div class="block">
+        <div class="label">After (my edited version)</div>
+        <p>"A page not getting clicks doesn't mean it's not doing great — I built a way to tell the two apart before anyone wastes a week rewriting something that was never broken."</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-band">
+    <p>Want to talk through how this approach could apply to your own team's data?</p>
+    <a href="contact.html" class="btn">Talk to me about how I'd apply this on your team</a>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">© Simon Okosodo. Built by hand — no framework, no build step.</div>
+</footer>
+
+</body>
+</html>
