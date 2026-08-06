@@ -33,9 +33,30 @@
   <section>
     <div class="card">
       <h3>Email</h3>
-      <p><a href="mailto:simonokosodopatrick@gmail.com">simonokosodopatrick@gmail.com</a></p>
+      <p><a href="mailto:simonokosodopatrick@gmail.com">simonokosodopatrick@gmail.com</a>
+        &nbsp;&nbsp;<button onclick="copyEmail()" id="copyBtn" style="font-family:'IBM Plex Sans',sans-serif; font-size:14px; padding:6px 14px; border-radius:4px; border:1px solid var(--line); background:transparent; color:var(--ink); cursor:pointer;">Copy</button>
+      </p>
+      <p style="font-size:13px; color:var(--muted); margin-top:-8px;">If clicking the address doesn't open your mail app, use Copy and paste it into your own email.</p>
     </div>
   </section>
+
+  <script>
+    function copyEmail(){
+      var btn = document.getElementById('copyBtn');
+      var showCopied = function(){
+        var original = 'Copy';
+        btn.textContent = 'Copied!';
+        setTimeout(function(){ btn.textContent = original; }, 1500);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText('simonokosodopatrick@gmail.com').then(showCopied).catch(function(){
+          window.prompt('Copy this email address:', 'simonokosodopatrick@gmail.com');
+        });
+      } else {
+        window.prompt('Copy this email address:', 'simonokosodopatrick@gmail.com');
+      }
+    }
+  </script>
 
   <section>
     <h2>Elsewhere</h2>
@@ -43,7 +64,7 @@
       <p><a href="https://www.linkedin.com/in/simon-okosodo-ai/" target="_blank" rel="noopener">LinkedIn</a></p>
       <p><a href="https://github.com/simon-okosodo-ds" target="_blank" rel="noopener">GitHub</a></p>
       <p><a href="Simon_Okosodo_CV.pdf" target="_blank" rel="noopener">Download my CV (PDF)</a></p>
-      <p><a href="https://calendly.com/simonokosodopatrick" target="_blank" rel="noopener">Book time with me</a></p>
+      <p><a href="https://calendly.com/simonokosodopatrick/30min" target="_blank" rel="noopener">Book time with me</a></p>
     </div>
   </section>
 
