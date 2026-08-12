@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Case Study — FlyRank Content Refresh | Simon Okosodo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* Scoped styles for the Week 8 live demo widget only -- kept local to this
+     page rather than added to style.css, so nothing else on the site is
+     touched. Uses the real, confirmed identity-kit hex values directly
+     (not var() names, since I don't have style.css's actual contents to
+     confirm those tokens are defined there the same way). */
+  #live-demo{padding:44px 0;}
+  #live-demo .demo-eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; text-transform:uppercase;
+    letter-spacing:0.14em; color:#2B3EFF; margin:0 0 14px;
+  }
+  #live-demo .sample-ids{font-family:'IBM Plex Mono', monospace; font-size:13px; color:#6E6E68; margin:0 0 20px;}
+  #live-demo .sample-ids code{background:rgba(20,22,27,0.08); padding:2px 6px; border-radius:3px;}
+  #live-demo .demo-row{display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap;}
+  #demo-input{
+    flex:1; min-width:220px; padding:12px 14px; border:1px solid rgba(20,22,27,0.2);
+    border-radius:4px; font-family:'IBM Plex Mono', monospace; font-size:14px;
+  }
+  #demo-button{
+    padding:12px 24px; background:#2B3EFF; color:#fff; border:none;
+    border-radius:4px; font-family:'Space Grotesk', sans-serif; font-weight:700;
+    font-size:14px; cursor:pointer;
+  }
+  #demo-button:hover{opacity:0.9;}
+  #demo-result{min-height:24px;}
+  #demo-result .result-card{
+    background:#F2F2F2; border-left:4px solid #2B3EFF; padding:16px;
+    border-radius:4px; margin-top:8px;
+  }
+  #demo-result .result-card p{margin:0 0 8px; font-size:15px;}
+  #demo-result .result-card p:last-child{margin-bottom:0;}
+  @media (max-width:640px){
+    #live-demo .demo-row{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a href="index.html" class="nav-mark"><span class="sq"><span>S</span></span> Simon Okosodo</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="case-study.html" class="active">Case Study</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <section>
+    <p class="eyebrow">Case Study</p>
+    <h1>FlyRank Content Refresh — Diagnosis Before Action</h1>
+  </section>
+
+  <section>
+    <h2>The problem</h2>
+    <p>FlyRank's existing system flags "declining" pages using one blunt rule. It can't tell the difference between a page that genuinely needs a rewrite and a page that's actually fine — it just stopped getting clicks because Google now answers the question directly on the results page. A page not getting clicks doesn't mean it's not doing great.</p>
+  </section>
+
+  <section>
+    <h2>What I did — and decided</h2>
+    <p>I combined two of the project's four predefined lanes into one queue instead of picking a single one, because "which pages need review" and "why they're underperforming" are really one question, not two. The core decision: diagnosis before action. I treated wasted editor time — someone rewriting a page that was never the problem — as the costlier mistake to guard against, over missing a real decliner. And when I found a pattern that looked like it could explain the "clicks fine, impressions falling" cases, I called it what it is: a proxy, not proof.</p>
+
+    <a href="images/task-framing.png" target="_blank" rel="noopener" class="screenshot-link"><img src="images/task-framing.png" alt="Real notebook output showing the ML task framing: 30,000 rows, 32 clients, ranking and diagnosis task types" class="screenshot"></a>
+    <p class="screenshot-caption">Real notebook output — task framing (ML-03), run against the actual starter dataset.</p>
+  </section>
+
+  <section>
+    <h2>What came of it</h2>
+    <p>1,111 pages (3.7%) show the "impressions fine, clicks falling" pattern — and none of them are caught by the existing "declining" label. That's a real gap in the current system, not a guess.</p>
+
+    <a href="images/diagnostic-finding.png" target="_blank" rel="noopener" class="screenshot-link"><img src="images/diagnostic-finding.png" alt="Real notebook output showing the diagnostic segment code and its result: 1,111 pages, 3.7%, 0% caught by the existing decline label" class="screenshot"></a>
+    <p class="screenshot-caption">Real notebook output — the diagnostic segment, checked directly against the data.</p>
+  </section>
+
+  <section>
+    <h2>Before / after: my editing voice</h2>
+    <div class="before-after">
+      <div class="block">
+        <div class="label">Before (generic AI line)</div>
+        <p>"This solution leverages advanced analytics to drive significant improvements in content performance, delivering measurable, results-driven impact for the business."</p>
+      </div>
+      <div class="block">
+        <div class="label">After (my edited version)</div>
+        <p>"A page not getting clicks doesn't mean it's not doing great — I built a way to tell the two apart before anyone wastes a week rewriting something that was never broken."</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== NEW: Week 8 "Make It Do Something" live demo ============== -->
+  <section id="live-demo">
+    <p class="demo-eyebrow">Try It — Real Data, Live</p>
+    <h2>Look up a real page from my ranked queue</h2>
+    <p>This queries my actual, already-scored FlyRank content queue (32,954 real pages) live, through a real backend function — not a mockup.</p>
+    <p class="sample-ids">Try a real ID: <code>content_e8a52cf3d5988c07</code> or <code>content_82e35c4845e6c391</code></p>
+
+    <div class="demo-row">
+      <input id="demo-input" type="text" placeholder="Paste a content_id...">
+      <button id="demo-button">Look Up</button>
+    </div>
+
+    <div id="demo-result"></div>
+  </section>
+  <!-- ============================================================================ -->
+
+  <div class="cta-band">
+    <p>Want to talk through how this approach could apply to your own team's data?</p>
+    <a href="contact.html" class="btn">Talk to me about how I'd apply this on your team</a>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">© Simon Okosodo. Built by hand — no framework, no build step.</div>
+</footer>
+
+<script>
+  document.getElementById('demo-button').addEventListener('click', async () => {
+    const input = document.getElementById('demo-input');
+    const resultBox = document.getElementById('demo-result');
+    const contentId = input.value.trim();
+
+    if (!contentId) {
+      resultBox.innerHTML = '<p style="color:#B00020;">Please enter a content_id first.</p>';
+      return;
+    }
+
+    resultBox.innerHTML = '<p style="color:#6E6E68;">Looking up real data...</p>';
+
+    try {
+      const response = await fetch(`/.netlify/functions/lookup?content_id=${encodeURIComponent(contentId)}`);
+      const data = await response.json();
+
+      if (!data.found) {
+        resultBox.innerHTML = `<p style="color:#6E6E68;">${data.message}</p>`;
+        return;
+      }
+
+      resultBox.innerHTML = `
+        <div class="result-card">
+          <p><strong>Score:</strong> ${data.score.toLocaleString()}</p>
+          <p><strong>Reason code:</strong> ${data.reason_code}</p>
+          <p><strong>Recommended action:</strong> ${data.action_label}</p>
+        </div>
+      `;
+    } catch (err) {
+      resultBox.innerHTML = '<p style="color:#B00020;">Something went wrong reaching the lookup service. Try again in a moment.</p>';
+    }
+  });
+</script>
+
+</body>
+</html>
