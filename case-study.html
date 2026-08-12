@@ -4,9 +4,44 @@
 <meta charset="UTF-8">
 <title>Case Study — FlyRank Content Refresh | Simon Okosodo</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="preconnect" href="https://googleapis.com">
-<link href="https://googleapis.com/css2?family=Space+Grotesk:wght@700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+  /* Scoped styles for the Week 8 live demo widget only -- kept local to this
+     page rather than added to style.css, so nothing else on the site is
+     touched. Uses the real, confirmed identity-kit hex values directly
+     (not var() names, since I don't have style.css's actual contents to
+     confirm those tokens are defined there the same way). */
+  #live-demo{padding:44px 0;}
+  #live-demo .demo-eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; text-transform:uppercase;
+    letter-spacing:0.14em; color:#2B3EFF; margin:0 0 14px;
+  }
+  #live-demo .sample-ids{font-family:'IBM Plex Mono', monospace; font-size:13px; color:#6E6E68; margin:0 0 20px;}
+  #live-demo .sample-ids code{background:rgba(20,22,27,0.08); padding:2px 6px; border-radius:3px;}
+  #live-demo .demo-row{display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap;}
+  #demo-input{
+    flex:1; min-width:220px; padding:12px 14px; border:1px solid rgba(20,22,27,0.2);
+    border-radius:4px; font-family:'IBM Plex Mono', monospace; font-size:14px;
+  }
+  #demo-button{
+    padding:12px 24px; background:#2B3EFF; color:#fff; border:none;
+    border-radius:4px; font-family:'Space Grotesk', sans-serif; font-weight:700;
+    font-size:14px; cursor:pointer;
+  }
+  #demo-button:hover{opacity:0.9;}
+  #demo-result{min-height:24px;}
+  #demo-result .result-card{
+    background:#F2F2F2; border-left:4px solid #2B3EFF; padding:16px;
+    border-radius:4px; margin-top:8px;
+  }
+  #demo-result .result-card p{margin:0 0 8px; font-size:15px;}
+  #demo-result .result-card p:last-child{margin-bottom:0;}
+  @media (max-width:640px){
+    #live-demo .demo-row{flex-direction:column;}
+  }
+</style>
 </head>
 <body>
 
@@ -64,19 +99,21 @@
     </div>
   </section>
 
-  <!-- Interactive Data Lookup Widget Section -->
-  <section class="demo-section">
-    <h2>Try It — Real Data, Live</h2>
-    <p>Look up a real page from my ranked queue</p>
-    <p>This queries my actual, already-scored FlyRank content queue (32,954 real pages) live. Try one of these real IDs: <code>content_e8a52cf3d5988c07</code>, <code>content_82e35c4845e6c391</code></p>
-    
-    <div class="search-box">
-      <input type="text" id="content-id-input" placeholder="Paste a content_id...">
-      <button type="button" id="lookup-btn" class="btn">Look Up</button>
+  <!-- ============== NEW: Week 8 "Make It Do Something" live demo ============== -->
+  <section id="live-demo">
+    <p class="demo-eyebrow">Try It — Real Data, Live</p>
+    <h2>Look up a real page from my ranked queue</h2>
+    <p>This queries my actual, already-scored FlyRank content queue (32,954 real pages) live, through a real backend function — not a mockup.</p>
+    <p class="sample-ids">Try a real ID: <code>content_e8a52cf3d5988c07</code> or <code>content_82e35c4845e6c391</code></p>
+
+    <div class="demo-row">
+      <input id="demo-input" type="text" placeholder="Paste a content_id...">
+      <button id="demo-button">Look Up</button>
     </div>
-    
-    <div id="demo-output-target" style="margin-top: 20px; font-family: 'IBM Plex Mono', monospace;"></div>
+
+    <div id="demo-result"></div>
   </section>
+  <!-- ============================================================================ -->
 
   <div class="cta-band">
     <p>Want to talk through how this approach could apply to your own team's data?</p>
@@ -89,43 +126,38 @@
   <div class="wrap">© Simon Okosodo. Built by hand — no framework, no build step.</div>
 </footer>
 
-<!-- BACKEND ENGINE CONNECTION SCRIPT -->
 <script>
-  document.getElementById('lookup-btn').addEventListener('click', function() {
-    const inputVal = document.getElementById('content-id-input').value.trim();
-    const targetDiv = document.getElementById('demo-output-target');
-    
-    if(!inputVal) {
-      targetDiv.innerHTML = "<p style='color:red;'>⚠️ Please enter a content ID.</p>";
+  document.getElementById('demo-button').addEventListener('click', async () => {
+    const input = document.getElementById('demo-input');
+    const resultBox = document.getElementById('demo-result');
+    const contentId = input.value.trim();
+
+    if (!contentId) {
+      resultBox.innerHTML = '<p style="color:#B00020;">Please enter a content_id first.</p>';
       return;
     }
-    
-    targetDiv.innerHTML = "<p>🔄 Querying FlyRank data engine...</p>";
-    
-    // Simulate real-time lookup mapping to the dataset results
-    setTimeout(() => {
-      if(inputVal === 'content_e8a52cf3d5988c07') {
-        targetDiv.innerHTML = `
-          <div style="background:#f4f4f4; padding:15px; border-left:4px solid #000;">
-            <p><strong>ID:</strong> content_e8a52cf3d5988c07</p>
-            <p><strong>Model Score:</strong> 1.00</p>
-            <p><strong>Impressions:</strong> 42,912</p>
-            <p><strong>Diagnosis:</strong> Clicks falling, impressions stable (SERP Feature shift)</p>
-            <p><strong>Action:</strong> Queue for priority editorial optimization queue</p>
-          </div>`;
-      } else if(inputVal === 'content_82e35c4845e6c391') {
-        targetDiv.innerHTML = `
-          <div style="background:#f4f4f4; padding:15px; border-left:4px solid #000;">
-            <p><strong>ID:</strong> content_82e35c4845e6c391</p>
-            <p><strong>Model Score:</strong> 0.94</p>
-            <p><strong>Impressions:</strong> 18,405</p>
-            <p><strong>Diagnosis:</strong> Pure technical decline pattern</p>
-            <p><strong>Action:</strong> Structural rewrite required</p>
-          </div>`;
-      } else {
-        targetDiv.innerHTML = "<p style='color:orange;'>⚠️ Record found. Query returned successful state but ID is outside top-tier sample queue cluster.</p>";
+
+    resultBox.innerHTML = '<p style="color:#6E6E68;">Looking up real data...</p>';
+
+    try {
+      const response = await fetch(`/api/lookup?content_id=${encodeURIComponent(contentId)}`);
+      const data = await response.json();
+
+      if (!data.found) {
+        resultBox.innerHTML = `<p style="color:#6E6E68;">${data.message}</p>`;
+        return;
       }
-    }, 600);
+
+      resultBox.innerHTML = `
+        <div class="result-card">
+          <p><strong>Score:</strong> ${data.score.toLocaleString()}</p>
+          <p><strong>Reason code:</strong> ${data.reason_code}</p>
+          <p><strong>Recommended action:</strong> ${data.action_label}</p>
+        </div>
+      `;
+    } catch (err) {
+      resultBox.innerHTML = '<p style="color:#B00020;">Something went wrong reaching the lookup service. Try again in a moment.</p>';
+    }
   });
 </script>
 
