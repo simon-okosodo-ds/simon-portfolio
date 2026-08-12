@@ -1,14 +1,30 @@
 // netlify/functions/lookup.js
-// V2 syntax (current Netlify Functions API -- standard Request/Response objects,
-// not the older AWS-Lambda-style event/context handler).
-//
-// What this does: takes a content_id from the visitor, looks it up in the real,
-// already-scored FlyRank queue data, and returns the real diagnosis/action --
-// or an honest "not found" if it's not a real id, never a guess.
+// More robust version: reads the JSON file manually with fs.readFileSync instead
+// of relying on newer "import ... with { type: 'json' }" syntax, which requires a
+// fairly recent Node version and may not be supported by Netlify's default runtime.
+// This approach works on essentially any Node version Netlify uses.
 
-import queueData from "./queue-data.json" with { type: "json" };
+import { readFileSync } from "node:fs";
+
+let queueData;
+try {
+  const raw = readFileSync(new URL("./queue-data.json", import.meta.url));
+  queueData = JSON.parse(raw);
+} catch (err) {
+  // If the data file itself fails to load, we want a clear, specific error in
+  // the logs -- not a silent crash that just looks like "something broke."
+  console.error("FAILED TO LOAD queue-data.json:", err.message);
+  queueData = null;
+}
 
 export default async (req) => {
+  if (!queueData) {
+    return new Response(
+      JSON.stringify({ error: "Server data failed to load. Check function logs." }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
+  }
+
   const url = new URL(req.url);
   const contentId = url.searchParams.get("content_id")?.trim();
 
@@ -22,7 +38,6 @@ export default async (req) => {
   const match = queueData[contentId];
 
   if (!match) {
-    // Honest, not a guess -- most typed IDs won't be real ones, and that's fine.
     return new Response(
       JSON.stringify({
         found: false,
