@@ -1,0 +1,4 @@
+# Explicit config -- removes any ambiguity about where Netlify should look for
+# functions, regardless of Base Directory settings in the dashboard.
+[functions]
+  directory = "netlify/functions"
