@@ -64,6 +64,23 @@
     <h1>FlyRank Content Refresh — Diagnosis Before Action</h1>
   </section>
 
+  <!-- ============== Week 8 "Make It Do Something" -- moved up front, right after the hero ============== -->
+  <section id="live-demo">
+    <p class="demo-eyebrow">Try It — Real Data, Live</p>
+    <h2>What this does</h2>
+    <p>This is a real, working lookup tool, not a screenshot or a mockup. Type a real page ID below, and it queries my actual FlyRank content-scoring data (32,954 real, already-scored pages) through a live backend function running on Netlify's servers. It returns the genuine score, reason code, and recommended action for that exact page — or an honest "not found" if the ID doesn't exist.</p>
+    <p><strong>Data used:</strong> this queries my ML-07 baseline-rule queue specifically (score = search-impression volume × a striking-distance/volume flag) — the transparent, rule-based scoring layer of my project, not yet my trained diagnosis-first model. I'm building toward wiring this same lookup to that stronger model next.</p>
+    <p class="sample-ids">Try a real ID: <code>content_e8a52cf3d5988c07</code> or <code>content_82e35c4845e6c391</code></p>
+
+    <div class="demo-row">
+      <input id="demo-input" type="text" placeholder="Paste a content_id...">
+      <button id="demo-button">Look Up</button>
+    </div>
+
+    <div id="demo-result"></div>
+  </section>
+  <!-- ============================================================================================ -->
+
   <section>
     <h2>The problem</h2>
     <p>FlyRank's existing system flags "declining" pages using one blunt rule. It can't tell the difference between a page that genuinely needs a rewrite and a page that's actually fine — it just stopped getting clicks because Google now answers the question directly on the results page. A page not getting clicks doesn't mean it's not doing great.</p>
@@ -98,22 +115,6 @@
       </div>
     </div>
   </section>
-
-  <!-- ============== NEW: Week 8 "Make It Do Something" live demo ============== -->
-  <section id="live-demo">
-    <p class="demo-eyebrow">Try It — Real Data, Live</p>
-    <h2>Look up a real page from my ranked queue</h2>
-    <p>This queries my actual, already-scored FlyRank content queue (32,954 real pages) live, through a real backend function — not a mockup.</p>
-    <p class="sample-ids">Try a real ID: <code>content_e8a52cf3d5988c07</code> or <code>content_82e35c4845e6c391</code></p>
-
-    <div class="demo-row">
-      <input id="demo-input" type="text" placeholder="Paste a content_id...">
-      <button id="demo-button">Look Up</button>
-    </div>
-
-    <div id="demo-result"></div>
-  </section>
-  <!-- ============================================================================ -->
 
   <div class="cta-band">
     <p>Want to talk through how this approach could apply to your own team's data?</p>
