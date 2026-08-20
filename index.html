@@ -5,6 +5,12 @@
 <title>Simon Okosodo — Data Science</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="I cut wasted content reviews from 76% to 26% — doubling the team's effective review capacity.">
+
+<!-- ⬇⬇ NEW — favicon (was missing). Replace these two filenames with your real uploaded files. -->
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+<!-- ⬆⬆ -->
+
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Simon Okosodo">
 <meta property="og:title" content="Simon Okosodo — Data Science">
@@ -18,9 +24,19 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+
+<!-- ⬇⬇ NEW — Google Analytics (GA4). Replace G-XXXXXXXXXX with YOUR real Measurement ID, both places. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
+<!-- ⬆⬆ -->
+
 </head>
 <body>
-
 <nav class="nav">
   <div class="wrap">
     <a href="index.html" class="nav-mark"><span class="sq"><span>S</span></span> Simon Okosodo</a>
@@ -32,21 +48,17 @@
     </div>
   </div>
 </nav>
-
 <main class="wrap">
-
   <section>
     <p class="eyebrow">Data Science &amp; Applied ML</p>
     <h1>I cut wasted content reviews from 76% to 26% — doubling the team's effective review capacity.</h1>
     <p class="lede">Real work on FlyRank's real search-performance data. Not a class project — a system built to fix a real, costly problem.</p>
-
     <div class="proof-strip">
       <div><span class="stat">76%</span> <span class="stat-label">wasted editor reviews, before</span></div>
       <div><span class="stat">→</span></div>
       <div><span class="stat">26%</span> <span class="stat-label">wasted, after</span></div>
     </div>
   </section>
-
   <section>
     <h2>Featured case</h2>
     <div class="card">
@@ -55,23 +67,23 @@
       <a href="case-study.html">Read the full case study →</a>
     </div>
   </section>
-
   <section>
     <h2>About</h2>
     <p>Simon Okosodo — data science intern at FlyRank, early in my ML/data path. I care more about asking the right question than reaching for a model first.</p>
     <a href="about.html">More about how I work →</a>
   </section>
-
   <div class="cta-band">
     <p>Want to see how this could apply to your own data?</p>
     <a href="case-study.html" class="btn">Read the full case study</a>
   </div>
-
 </main>
-
 <footer>
-  <div class="wrap">© Simon Okosodo. Built by hand — no framework, no build step.</div>
+  <div class="wrap">
+    © Simon Okosodo. Built by hand — no framework, no build step.
+    <!-- Badge deferred: FlyRank confirmed badges issue early September. Add this line back in once you have the real image + verification link:
+    <a href="VERIFICATION-URL" target="_blank" rel="noopener"><img src="images/flyrank-badge.png" alt="FlyRank AI Fluency Graduate" style="height:24px;vertical-align:middle;margin-left:8px;"> FlyRank Graduate</a>
+    -->
+  </div>
 </footer>
-
 </body>
 </html>
