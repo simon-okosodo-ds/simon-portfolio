@@ -2,91 +2,485 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Simon Okosodo — Data Science</title>
+<title>Diagnosis-First Content Triage — Simon Okosodo, FlyRank ML Internship</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="I cut wasted content reviews from 76% to 26% — doubling the team's effective review capacity.">
-
-<!-- ⬇⬇ NEW — favicon (was missing). Replace these two filenames with your real uploaded files. -->
-<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
-<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
-<!-- ⬆⬆ -->
-
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Simon Okosodo">
-<meta property="og:title" content="Simon Okosodo — Data Science">
-<meta property="og:description" content="I cut wasted content reviews from 76% to 26% — doubling the team's effective review capacity.">
-<meta property="og:url" content="simon-okosodo-ds.github.io/simon-portfolio/">
-<meta property="og:image" content="https://simon-okosodo-ds.github.io/simon-portfolio/images/bio-photo.jpg">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Simon Okosodo — Data Science">
-<meta name="twitter:description" content="I cut wasted content reviews from 76% to 26% — doubling the team's effective review capacity.">
-<meta name="twitter:image" content="https://simon-okosodo-ds.netlify.app/images/bio-photo.jpg">
+<meta name="description" content="A validated ranking + diagnosis model for FlyRank content review, built on 9.8M rows of real production search data.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
-<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14161B;
+    --paper:#FAF9F5;
+    --cobalt:#2B3EFF;
+    --muted:#6E6E68;
+    --line: rgba(20,22,27,0.12);
+    --good: #1E7F4F;
+    --warn: #B5651D;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.6;
+  }
+  .wrap{max-width:700px;margin:0 auto;padding:88px 28px 120px;}
+  .cite-block{
+    font-family:'IBM Plex Mono', monospace;font-size:13px;line-height:1.7;
+    background:#F1F0EA;border:1px solid var(--line);border-radius:6px;padding:16px 18px;
+    white-space:pre-wrap;margin:14px 0 0;
+  }
+  a{color:var(--cobalt);}
+  h1,h2,h3{font-family:'Space Grotesk', sans-serif;font-weight:700;letter-spacing:-0.01em;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;font-size:13px;text-transform:uppercase;
+    letter-spacing:0.14em;color:var(--cobalt);margin:0 0 20px;
+  }
+  .hero h1{font-size:38px;line-height:1.15;margin:0 0 18px;}
+  .hero .byline{color:var(--muted);font-size:15px;margin-bottom:36px;}
+  .hero .byline a{color:var(--muted);text-decoration-color:var(--line);}
+  .abstract{
+    border-left:3px solid var(--cobalt);padding:4px 0 4px 22px;margin:0 0 48px;
+    font-size:17px;color:#2b2d33;
+  }
+  section{padding:40px 0;border-top:1px solid var(--line);}
+  h2{font-size:24px;margin:0 0 20px;}
+  h3{font-size:16px;margin:24px 0 10px;}
+  p{margin:0 0 14px;}
+  ul,ol{margin:0 0 14px;padding-left:22px;}
+  li{margin-bottom:6px;}
+  code, .mono{font-family:'IBM Plex Mono', monospace;font-size:0.92em;}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:15px;}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);}
+  th{font-family:'IBM Plex Mono', monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);}
+  .stat-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0;}
+  .stat{border:1px solid var(--line);border-radius:6px;padding:18px;}
+  .stat .num{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:28px;color:var(--cobalt);}
+  .stat .lbl{font-size:12.5px;color:var(--muted);margin-top:4px;}
+  .chart-card{border:1px solid var(--line);border-radius:6px;padding:24px;margin:22px 0;background:#fff;}
+  .chart-title{font-family:'IBM Plex Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:14px;}
+  .chart-caption{font-size:13.5px;color:var(--muted);margin-top:10px;}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;font-size:13px;}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .swatch{width:10px;height:10px;border-radius:2px;display:inline-block;}
+  .callout{
+    background:#F1F0EA;border:1px solid var(--line);border-radius:6px;padding:16px 18px;margin:16px 0;font-size:14.5px;
+  }
+  .callout.risk{border-color:#e3c9a8;background:#FBF3E8;}
+  .limits-list li{margin-bottom:12px;}
+  .rec-table td:first-child{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--cobalt);}
+  footer{margin-top:50px;padding-top:26px;border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;}
+  .toc{
+    font-size:14.5px;display:grid;grid-template-columns:repeat(2,1fr);
+    gap:16px 48px;margin-bottom:8px;max-width:480px;
+  }
+  .toc a{color:var(--cobalt);text-decoration:underline;text-decoration-color:var(--line);
+    text-underline-offset:3px;line-height:1.4;display:block;}
+  .toc a:hover{text-decoration-color:var(--cobalt);}
+  @media (max-width:640px){.toc{grid-template-columns:1fr;gap:12px;max-width:none;}}
 
-<!-- ⬇⬇ NEW — Google Analytics (GA4). Replace G-XXXXXXXXXX with YOUR real Measurement ID, both places. -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-N25312DDPX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-N25312DDPX');
-</script>
-<!-- ⬆⬆ -->
-
+  /* Sticky scrollspy nav — added after researching Distill.pub's floating-TOC pattern
+     and NN/g's table-of-contents usability findings (visible link signifiers + active-section
+     highlighting; an unstyled/non-sticky TOC on a 9-section page tested poorly per NN/g's
+     Wirecutter case study). Hidden until the reader scrolls past the hero. */
+  #stickynav{
+    position:sticky;top:0;z-index:10;background:rgba(250,249,245,0.96);backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);padding:10px 0;margin:0 -28px 0;
+    display:flex;gap:18px;overflow-x:auto;white-space:nowrap;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;
+    opacity:0;transform:translateY(-8px);pointer-events:none;transition:opacity .2s ease, transform .2s ease;
+  }
+  #stickynav.visible{opacity:1;transform:translateY(0);pointer-events:auto;}
+  #stickynav a{padding:6px 14px;color:var(--muted);text-decoration:none;border-radius:4px;}
+  #stickynav a.active{color:var(--paper);background:var(--cobalt);}
+  #stickynav::-webkit-scrollbar{display:none;}
+  @media (max-width:640px){#stickynav{margin:0 -18px 0;padding:8px 18px;}}
+</style>
 </head>
 <body>
-<nav class="nav">
-  <div class="wrap">
-    <a href="index.html" class="nav-mark"><span class="sq"><span>S</span></span> Simon Okosodo</a>
-    <div class="nav-links">
-      <a href="index.html" class="active">Home</a>
-      <a href="case-study.html">Case Study</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-    </div>
+<div class="wrap">
+
+  <div class="hero">
+    <p class="eyebrow">FlyRank ML Internship — Capstone Research Paper</p>
+    <h1>Diagnosis-First Content Triage: Ranking Which Pages to Review, and Why</h1>
+    <p class="byline">Simon Okosodo · Data Science Intern, FlyRank · Aug 2026 ·
+      <a href="https://simon-okosodo-ds.github.io/simon-portfolio/">Portfolio</a> ·
+      <a href="https://github.com/simon-okosodo-ds/flyrank-ml-internship-starter">Repo</a>
+    </p>
+
+    <nav class="toc">
+      <a href="#abstract">Abstract</a>
+      <a href="#problem">Introduction / Problem</a>
+      <a href="#data">Data</a>
+      <a href="#methodology">Methodology</a>
+      <a href="#results">Results</a>
+      <a href="#limitations">Limitations</a>
+      <a href="#recommendations">Ranked Recommendations</a>
+      <a href="#reproducibility">Reproducibility</a>
+      <a href="#credit">Acknowledgments &amp; Data Credit</a>
+    </nav>
   </div>
-</nav>
-<main class="wrap">
-  <section>
-    <p class="eyebrow">Data Science &amp; Applied ML</p>
-    <h1>I cut wasted content reviews from 76% to 26% — doubling the team's effective review capacity.</h1>
-    <p class="lede">Real work on FlyRank's real search-performance data. Not a class project — a system built to fix a real, costly problem.</p>
-    <div class="proof-strip">
-      <div><span class="stat">76%</span> <span class="stat-label">wasted editor reviews, before</span></div>
-      <div><span class="stat">→</span></div>
-      <div><span class="stat">26%</span> <span class="stat-label">wasted, after</span></div>
+
+  <nav id="stickynav" aria-label="Section navigation">
+    <a href="#problem" data-target="problem">Problem</a>
+    <a href="#data" data-target="data">Data</a>
+    <a href="#methodology" data-target="methodology">Methodology</a>
+    <a href="#results" data-target="results">Results</a>
+    <a href="#limitations" data-target="limitations">Limitations</a>
+    <a href="#recommendations" data-target="recommendations">Recommendations</a>
+    <a href="#reproducibility" data-target="reproducibility">Reproducibility</a>
+    <a href="#credit" data-target="credit">Credit</a>
+  </nav>
+
+  <p id="abstract" class="abstract">
+    <strong>Abstract.</strong> FlyRank's rule-based system for flagging declining content pages
+    for editor review is only 40% precise in its top-50 recommendations, wasting 30 of every
+    50 weekly editor reviews on pages that were never a real priority. This paper asks whether
+    a trained model, evaluated honestly on real production data, can beat that rule — and
+    whether a page's <em>reason</em> for underperforming (genuine decay vs. a SERP-answered
+    query vs. a fixable CTR problem) can be diagnosed alongside its rank. Using 9.8&nbsp;million
+    daily performance rows from FlyRank's pseudonymized internal warehouse (55 clients,
+    331,437 content items, Feb&ndash;Mar 2026), a Random Forest classifier was trained on
+    prior-month signals to predict next-month improvement, validated with a client-grouped
+    split to prevent memorization. The model reached Precision@50&nbsp;=&nbsp;0.820 versus the
+    baseline's 0.400 — cutting wasted editor reviews from 60% to 18% per week, roughly 21 extra
+    productive reviews out of 50 — while a diagnosis layer classified 10.5% of eligible pages
+    as likely SERP-answered, a pattern the existing rule cannot distinguish from genuine decline
+    at all. This is decision-support evidence for FlyRank's editorial triage workflow, not a
+    causal claim and not a claim about Google's ranking algorithm.
+  </p>
+
+  <section id="problem">
+    <p class="eyebrow">01 — Introduction / Problem</p>
+    <h2>Editors can review 50 pages a week. The current rule wastes 30 of them.</h2>
+    <p>
+      FlyRank manages tens of thousands of pages across dozens of clients, but a human editor
+      can carefully review only about 50 pages a week. The existing rule-based flag —
+      <span class="mono">in_striking_distance &amp; has_real_volume</span> — decides which
+      50 pages an editor opens first. On real March 2026 warehouse data, that rule is only
+      <strong>40% precise</strong> in its own top 50: 30 of 50 recommended pages turn out not
+      to be real priorities. Every one of those 30 reviews is a paid editor-hour spent on a
+      page that was never the problem, while a genuinely declining page elsewhere goes unlooked-at
+      for another week.
+    </p>
+    <p>
+      A second, separate failure sits underneath the first: even when the rule is right that a
+      page needs attention, it gives no reason why. A page whose clicks fell because Google now
+      answers the query directly on the results page (no click opportunity left to recover) looks
+      identical to the rule as a page that is genuinely stale and needs a rewrite — but the fix
+      for each is completely different, and rewriting the first wastes the same editor-hour a
+      second time.
+    </p>
+    <p>
+      <strong>The decision this project improves:</strong> which pages an editor opens first, and
+      what kind of fix they should expect before opening the page — not just <em>whether</em> to
+      review a page, but <em>why</em>.
+    </p>
+  </section>
+
+  <section id="data">
+    <p class="eyebrow">02 — Data</p>
+    <h2>9.8 million rows, one real client-grouped comparison</h2>
+    <p>
+      Source: FlyRank's pseudonymized internal warehouse release,
+      <span class="mono">FlyRank/internship-warehouse</span> on Hugging Face, build
+      <span class="mono">flyrank_pseudonymized_warehouse_release_v20260703</span>. Table used:
+      <span class="mono">fact_content_daily_performance</span> (grain: one row per
+      client&nbsp;×&nbsp;content&nbsp;×&nbsp;day), for the calendar months of
+      <strong>February and March 2026</strong> — February as the feature window, March as the
+      outcome window, so no feature ever sees the future it is meant to predict.
+    </p>
+    <div class="stat-strip">
+      <div class="stat"><div class="num">9,841,378</div><div class="lbl">daily rows, Feb+Mar 2026</div></div>
+      <div class="stat"><div class="num">55</div><div class="lbl">clients with March data</div></div>
+      <div class="stat"><div class="num">331,437</div><div class="lbl">content items, March</div></div>
+    </div>
+    <p>
+      February content-level features were joined to March outcomes on
+      <span class="mono">client_hash_id + content_hash_id</span>. Pages needed real,
+      measurable March volume (≥10 impressions) to compute a trustworthy outcome, and both
+      months needed to match — leaving <strong>130,969 eligible rows</strong> for modeling.
+    </p>
+    <p><strong>Deliberately excluded, and why:</strong></p>
+    <ul>
+      <li><span class="mono">trend_direction</span> / <span class="mono">trend_pct</span> — these
+        are the source of the existing rule's own label; using them as features would be circular.</li>
+      <li>Any FlyRank product-decision column (<span class="mono">health_score</span>,
+        <span class="mono">priority_score</span>, <span class="mono">action_type</span>) — these
+        encode a decision the current system already made; feeding them back in would just teach
+        the model to copy that decision, not discover anything new.</li>
+      <li>GA4-derived engagement fields — only 4.2% of March rows have
+        <span class="mono">ga4_data_available IS TRUE</span>, too sparse to trust as a feature
+        this month.</li>
+      <li>Raw client names, domains, URLs, and search queries — never present in the release at all.</li>
+    </ul>
+  </section>
+
+  <section id="methodology">
+    <p class="eyebrow">03 — Methodology</p>
+    <h2>A forward-looking label, a client-grouped split, and a diagnosis layer</h2>
+    <h3>Target</h3>
+    <p>
+      Unlike the starter pipeline's same-window <span class="mono">is_declining_label</span>, the
+      label here is a genuine future outcome:
+      <em>did a page's CTR or average position improve from February to March?</em> Features come
+      entirely from February; the label comes entirely from March.
+    </p>
+    <h3>Features</h3>
+    <p class="mono">impressions, clicks, avg_position, in_striking_distance, has_real_volume</p>
+    <p>All five are knowable at the February decision point — no feature crosses into March.</p>
+    <h3>Baseline</h3>
+    <p>
+      The existing FlyRank-style rule, encoded transparently with no fitted weights:
+      <span class="mono">score = impressions × (in_striking_distance AND has_real_volume)</span>,
+      where striking distance is position 11–30 and real volume is ≥100 impressions.
+    </p>
+    <h3>Model</h3>
+    <p>
+      Logistic Regression, then Random Forest (200 trees) — the same method ladder the starter
+      pipeline itself used, for a true apples-to-apples comparison against FlyRank's own reference
+      result (0.240 → 0.740 on the 30k-row starter slice).
+    </p>
+    <h3>Validation design — the honest part</h3>
+    <p>
+      <strong>Primary: client-grouped split</strong> (28 train clients, 12 test clients, no
+      overlap). Pages from the same client share hidden patterns — a random split would let the
+      model memorize a client's template rather than learn a transferable pattern. A second,
+      plain random split is reported alongside on purpose, not hidden, to show the size of the
+      memorization gap grouping protects against.
+    </p>
+    <h3>Diagnosis layer</h3>
+    <p>
+      A four-category classifier reused from ML-03's <span class="mono">diagnose()</span> logic,
+      remapped onto this notebook's Feb (prior) / March (last) structure:
+    </p>
+    <table>
+      <tr><th>Category</th><th>Rule</th><th>Editor action</th></tr>
+      <tr><td>genuine_decline</td><td>impressions AND clicks both fell</td><td>refresh_or_rewrite</td></tr>
+      <tr><td>likely_serp_answered</td><td>impressions held/grew, clicks fell</td><td>flag_for_human_review_only</td></tr>
+      <tr><td>ctr_fixable</td><td>CTR &lt; 0.3, position ≤ 20</td><td>review_title_and_meta</td></tr>
+      <tr><td>stable_or_improving</td><td>none of the above</td><td>no_action</td></tr>
+    </table>
+    <div class="callout risk">
+      <strong>Named up front:</strong> <span class="mono">likely_serp_answered</span>'s real-world
+      justification — that an AI Overview or featured snippet intercepted the click — rests on
+      external industry reporting, not on FlyRank's own query-level SERP-feature data. It is a
+      <em>proxy signature</em>, not a confirmed cause, and this paper never claims otherwise.
     </div>
   </section>
-  <section>
-    <h2>Featured case</h2>
-    <div class="card">
-      <h3>FlyRank Content Refresh — Diagnosis Before Action</h3>
-      <p>FlyRank's system flagged "declining" pages with one blunt rule — unable to tell a page that genuinely needed a rewrite from one that was fine but just stopped getting clicks. I found a real, previously invisible pattern: 1,111 pages (3.7%) losing clicks while impressions held steady, and none of them caught by the existing label.</p>
-      <a href="case-study.html">Read the full case study →</a>
+
+  <section id="results">
+    <p class="eyebrow">04 — Results</p>
+    <h2>0.400 → 0.820: the model more than doubles baseline precision</h2>
+
+    <div class="chart-card">
+      <div class="chart-title">Precision@50 — baseline rule vs. random forest (client-grouped)</div>
+      <svg viewBox="0 0 520 200" width="100%" height="200" role="img" aria-label="Bar chart comparing baseline precision 0.400 to model precision 0.820">
+        <line x1="60" y1="20" x2="60" y2="160" stroke="#14161B" stroke-opacity="0.2"/>
+        <line x1="60" y1="160" x2="500" y2="160" stroke="#14161B" stroke-opacity="0.2"/>
+        <!-- baseline bar -->
+        <rect x="130" y="90.4" width="90" height="69.6" fill="#6E6E68"/>
+        <text x="175" y="80" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="15" fill="#14161B">0.400</text>
+        <text x="175" y="178" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#6E6E68">Baseline rule</text>
+        <!-- model bar -->
+        <rect x="300" y="17.6" width="90" height="142.4" fill="#2B3EFF"/>
+        <text x="345" y="8" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="15" fill="#2B3EFF" font-weight="700">0.820</text>
+        <text x="345" y="178" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#6E6E68">Random Forest</text>
+        <text x="60" y="164" font-family="IBM Plex Mono, monospace" font-size="10" fill="#6E6E68" text-anchor="end">0</text>
+        <text x="60" y="24" font-family="IBM Plex Mono, monospace" font-size="10" fill="#6E6E68" text-anchor="end">1.0</text>
+      </svg>
+      <p class="chart-caption">Same 130,969-row test population, same client-grouped split, same metric.
+        Base rate (share of pages that genuinely improved) was 46.5% — well below both scores,
+        confirming the model is finding real signal, not just guessing high.</p>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">The memorization gap — grouped split vs. naive random split</div>
+      <svg viewBox="0 0 520 200" width="100%" height="200" role="img" aria-label="Bar chart comparing grouped split precision 0.820 to random split precision 1.000">
+        <line x1="60" y1="20" x2="60" y2="160" stroke="#14161B" stroke-opacity="0.2"/>
+        <line x1="60" y1="160" x2="500" y2="160" stroke="#14161B" stroke-opacity="0.2"/>
+        <rect x="130" y="17.6" width="90" height="142.4" fill="#2B3EFF"/>
+        <text x="175" y="8" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="15" fill="#2B3EFF" font-weight="700">0.820</text>
+        <text x="175" y="178" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#6E6E68">Grouped (honest)</text>
+        <rect x="300" y="20" width="90" height="140" fill="#B5651D"/>
+        <text x="345" y="10" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="15" fill="#B5651D" font-weight="700">1.000</text>
+        <text x="345" y="178" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#6E6E68">Random (naive)</text>
+      </svg>
+      <p class="chart-caption">A plain random split lets pages from the same client appear in both
+        train and test, so the model can memorize a client's template instead of learning a
+        transferable pattern — the perfect 1.000 score is a warning sign, not a win. Reported
+        here on purpose rather than hidden, per the project's leakage-hunting discipline.</p>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">Diagnosis distribution — 130,969 eligible pages</div>
+      <svg viewBox="0 0 340 220" width="100%" height="220" role="img" aria-label="Donut chart of diagnosis categories">
+        <g transform="translate(110,110)">
+          <circle r="80" fill="none" stroke="#E7E4DA" stroke-width="34"/>
+          <circle r="80" fill="none" stroke="#2B3EFF" stroke-width="34"
+            stroke-dasharray="292.04 502.65" stroke-dashoffset="0" transform="rotate(-90)"/>
+          <circle r="80" fill="none" stroke="#6E6E68" stroke-width="34"
+            stroke-dasharray="120.13 502.65" stroke-dashoffset="-292.04" transform="rotate(-90)"/>
+          <circle r="80" fill="none" stroke="#B5651D" stroke-width="34"
+            stroke-dasharray="52.78 502.65" stroke-dashoffset="-412.18" transform="rotate(-90)"/>
+          <circle r="80" fill="none" stroke="#14161B" stroke-width="34"
+            stroke-dasharray="37.70 502.65" stroke-dashoffset="-464.96" transform="rotate(-90)"/>
+          <text x="0" y="-4" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="24" fill="#14161B">58.1%</text>
+          <text x="0" y="16" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="#6E6E68">CTR-fixable</text>
+        </g>
+        <g transform="translate(255,40)" font-family="IBM Plex Sans, sans-serif" font-size="12.5">
+          <rect width="10" height="10" fill="#2B3EFF"/><text x="16" y="9">CTR-fixable — 58.1%</text>
+          <rect y="24" width="10" height="10" fill="#6E6E68"/><text x="16" y="33">Stable/improving — 23.9%</text>
+          <rect y="48" width="10" height="10" fill="#B5651D"/><text x="16" y="57">Likely SERP-answered — 10.5%</text>
+          <rect y="72" width="10" height="10" fill="#14161B"/><text x="16" y="81">Genuine decline — 7.5%</text>
+        </g>
+      </svg>
+      <p class="chart-caption">1 in 10 eligible pages (13,775 of 130,969) show the "impressions
+        held, clicks fell" signature — the exact pattern the old single-bucket "declining" rule
+        cannot separate from genuine decay.</p>
+    </div>
+
+    <h3>What the corrected editor-hours number is, and why it changed</h3>
+    <p>
+      An earlier export mixed two different baselines: the <em>starter dataset's</em> Precision@50
+      (0.240) with this notebook's <em>real warehouse</em> model score (0.820) — an apples-to-oranges
+      comparison. Recomputed consistently, using the real warehouse baseline (0.400) against the
+      real warehouse model (0.820) on the same 50-page week:
+    </p>
+    <div class="stat-strip">
+      <div class="stat"><div class="num">30 → 9</div><div class="lbl">wasted reviews per 50-page week</div></div>
+      <div class="stat"><div class="num">21</div><div class="lbl">editor-hours freed per week, same headcount</div></div>
+      <div class="stat"><div class="num">2.05×</div><div class="lbl">precision improvement, model vs. rule</div></div>
     </div>
   </section>
-  <section>
-    <h2>About</h2>
-    <p>Simon Okosodo — data science intern at FlyRank, early in my ML/data path. I care more about asking the right question than reaching for a model first.</p>
-    <a href="about.html">More about how I work →</a>
+
+  <section id="limitations">
+    <p class="eyebrow">05 — Limitations &amp; honest framing</p>
+    <h2>What this work cannot claim</h2>
+    <ul class="limits-list">
+      <li><strong>Snapshot, not causal proof.</strong> This shows an <em>observed association</em>
+        between February signals and March outcomes on one client-grouped split. It does not show
+        that acting on a recommendation <em>causes</em> a page to improve — that needs an A/B test
+        or another causal design this data alone cannot provide.</li>
+      <li><strong><span class="mono">avg_position = 0</span> bug, found via error review, not fixed.</strong>
+        Per the data dictionary, 0 means "no position data," not literal rank zero — but the current
+        query never filters it before averaging, pulling sparse-data pages toward an artificially
+        strong position. 303 rows in the final queue carry this risk. The three most confidently
+        wrong predictions in error analysis all shared this exact issue.</li>
+      <li><strong>Only 40 of 55 March clients appear in the final model</strong> (28 train + 12
+        test). Investigated directly: only 5 are explained by having zero February history at
+        all; the remaining 10 were removed by the ≥10-impression March volume filter — a
+        deliberate, named filtering choice, not a join bug.</li>
+      <li><strong>GA4 engagement signal is unusable this month.</strong> Only 4.2% of March rows
+        have <span class="mono">ga4_data_available IS TRUE</span> — far too sparse to trust as a
+        feature without an explicit "not available" category.</li>
+      <li><strong>The SERP-answered diagnosis is directional, not confirmed.</strong> No
+        query-level SERP-feature data (whether an AI Overview fired) exists in this release —
+        the pattern is a proxy signature backed by external industry reporting, never presented
+        as proof.</li>
+      <li><strong>The ≥10-impression March filter excludes pages that went fully silent.</strong>
+        A page could "improve" by disappearing entirely from a declining trend into total silence
+        — that would not register as improved here.</li>
+    </ul>
   </section>
-  <div class="cta-band">
-    <p>Want to see how this could apply to your own data?</p>
-    <a href="case-study.html" class="btn">Read the full case study</a>
-  </div>
-</main>
-<footer>
-  <div class="wrap">
-    © Simon Okosodo. Built by hand — no framework, no build step.
-    <!-- Badge deferred: FlyRank confirmed badges issue early September. Add this line back in once you have the real image + verification link:
-    <a href="VERIFICATION-URL" target="_blank" rel="noopener"><img src="images/flyrank-badge.png" alt="FlyRank AI Fluency Graduate" style="height:24px;vertical-align:middle;margin-left:8px;"> FlyRank Graduate</a>
-    -->
-  </div>
-</footer>
+
+  <section id="recommendations">
+    <p class="eyebrow">06 — Ranked recommendations</p>
+    <h2>The action playbook</h2>
+    <p>Every recommendation below carries a reason code so an editor can see <em>why</em>, not just <em>that</em>.</p>
+    <table class="rec-table">
+      <tr><th>Diagnosis</th><th>Recommended action</th><th>Human-review requirement</th></tr>
+      <tr><td>genuine_decline</td><td>Refresh or rewrite</td><td>Confirm this isn't consolidation, seasonality, or noise before commissioning a rewrite</td></tr>
+      <tr><td>likely_serp_answered</td><td>Flag for review only — no rewrite</td><td>Never auto-confirmed as SERP-cannibalized; treat as "needs human judgment," not a settled diagnosis</td></tr>
+      <tr><td>ctr_fixable</td><td>Review title / meta description</td><td>Confirm <span class="mono">avg_position</span> ≠ 0 (no-data) before trusting the position signal</td></tr>
+      <tr><td>stable_or_improving</td><td>No action — protect, don't touch</td><td>—</td></tr>
+    </table>
+    <h3>What should never be automated</h3>
+    <ol>
+      <li>Auto-publishing a rewrite from <span class="mono">genuine_decline</span> alone — a human
+        must rule out consolidation, seasonality, and noise first.</li>
+      <li>Auto-confirming <span class="mono">likely_serp_answered</span> as cannibalization — the
+        evidence is external and directional, not FlyRank's own confirmed signal.</li>
+      <li>Treating <span class="mono">model_score</span> as a guaranteed outcome — it is a
+        validated, honest probability (Precision@50 = 0.820), not a promise.</li>
+    </ol>
+    <h3>Monitoring / retrain triggers</h3>
+    <ul>
+      <li>Re-run monthly at minimum — this is a fixed Feb→Mar snapshot and will report the same
+        pages forever without a refresh.</li>
+      <li>Watch the diagnosis-share baseline (CTR-fixable 58.1% / stable 23.9% / SERP-answered
+        10.5% / decline 7.5%) — a sharp shift signals something platform-wide changed.</li>
+      <li>Retrain if Precision@50 on a fresh month drops meaningfully below ~0.820.</li>
+    </ul>
+  </section>
+
+  <section id="reproducibility">
+    <p class="eyebrow">07 — Reproducibility</p>
+    <h2>Every number above traces to an executed notebook cell</h2>
+    <p>Repo: <a href="https://github.com/simon-okosodo-ds/flyrank-ml-internship-starter">github.com/simon-okosodo-ds/flyrank-ml-internship-starter</a></p>
+    <table>
+      <tr><th>Notebook</th><th>What it proves</th></tr>
+      <tr><td><a class="mono" href="https://github.com/simon-okosodo-ds/flyrank-ml-internship-starter/blob/main/work/notebooks/w03_data_contract.ipynb">work/notebooks/w03_data_contract.ipynb</a></td><td>Grain, row counts, GA4 availability (4.2%), the leakage trap (0.983 honest vs 1.000 leaky)</td></tr>
+      <tr><td><a class="mono" href="https://github.com/simon-okosodo-ds/flyrank-ml-internship-starter/blob/main/work/notebooks/w03_feature_leakage_check.ipynb">work/notebooks/w03_feature_leakage_check.ipynb</a></td><td>Feature vector + leakage hunt on the final feature set</td></tr>
+      <tr><td><a class="mono" href="https://github.com/simon-okosodo-ds/flyrank-ml-internship-starter/blob/main/work/notebooks/w04_signal_audit.ipynb">work/notebooks/w04_signal_audit.ipynb</a></td><td>CONFIRMED verdicts on position→CTR and striking-distance→volume signals</td></tr>
+      <tr><td><a class="mono" href="https://github.com/simon-okosodo-ds/flyrank-ml-internship-starter/blob/main/work/notebooks/w04_baseline_score.ipynb">work/notebooks/w04_baseline_score.ipynb</a></td><td>The 0.400 baseline rule, transparent scoring, top-10 hand review</td></tr>
+      <tr><td><a class="mono" href="https://github.com/simon-okosodo-ds/flyrank-ml-internship-starter/blob/main/work/notebooks/w05_model.ipynb">work/notebooks/w05_model.ipynb</a></td><td>Random Forest training, client-grouped vs. random split, 0.820 vs 1.000</td></tr>
+      <tr><td><a class="mono" href="https://github.com/simon-okosodo-ds/flyrank-ml-internship-starter/blob/main/work/notebooks/w06_validation_audit.ipynb">work/notebooks/w06_validation_audit.ipynb</a></td><td>Honest-split re-audit, final leakage re-hunt, claim rewrite</td></tr>
+      <tr><td><a class="mono" href="https://github.com/simon-okosodo-ds/flyrank-ml-internship-starter/blob/main/work/notebooks/w07_action_playbook.ipynb">work/notebooks/w07_action_playbook.ipynb</a></td><td>Diagnosis layer, ranked queue, no-go list, the corrected 21-hour figure</td></tr>
+    </table>
+    <p>Data: gated on Hugging Face at <span class="mono">FlyRank/internship-warehouse</span>, build
+      <span class="mono">flyrank_pseudonymized_warehouse_release_v20260703</span>. Random seed
+      fixed at 42 throughout; scikit-learn RandomForestClassifier, 200 estimators.</p>
+
+    <h3>How to cite this work</h3>
+    <div class="cite-block">Okosodo, S. (2026). Diagnosis-First Content Triage: Ranking Which
+Pages to Review, and Why. FlyRank ML Internship Capstone.
+https://simon-okosodo-ds.github.io/flyrank-ml-internship-starter/</div>
+  </section>
+
+  <footer id="credit">
+    <p class="eyebrow" style="margin-bottom:8px;">08 — Acknowledgments &amp; Data Credit</p>
+    <p>Built on the FlyRank ML Internship dataset — <a href="https://flyrank.ai">flyrank.ai</a>.
+      Data pseudonymized and released for internship research use only; no client names, URLs,
+      or private search queries appear anywhere in this page or the linked repo.</p>
+  </footer>
+
+</div>
+
+<script>
+// Sticky nav: show once the reader scrolls past the hero, hide again near the top.
+// Active-link highlight via IntersectionObserver — the "which section am I in" signal
+// NN/g's table-of-contents research names as a real usability gap when it's missing.
+(function () {
+  var stickyNav = document.getElementById('stickynav');
+  var hero = document.querySelector('.hero');
+  var navLinks = Array.prototype.slice.call(stickyNav.querySelectorAll('a'));
+  var sections = navLinks.map(function (a) {
+    return document.getElementById(a.dataset.target);
+  }).filter(Boolean);
+
+  var heroObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      stickyNav.classList.toggle('visible', !entry.isIntersecting);
+    });
+  }, { threshold: 0, rootMargin: '-40px 0px 0px 0px' });
+  heroObserver.observe(hero);
+
+  var sectionObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      var link = stickyNav.querySelector('a[data-target="' + entry.target.id + '"]');
+      if (!link) return;
+      if (entry.isIntersecting) {
+        navLinks.forEach(function (l) { l.classList.remove('active'); });
+        link.classList.add('active');
+      }
+    });
+  }, { threshold: 0, rootMargin: '-45% 0px -45% 0px' });
+  sections.forEach(function (s) { sectionObserver.observe(s); });
+})();
+</script>
 </body>
 </html>
