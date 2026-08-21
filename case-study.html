@@ -96,7 +96,7 @@
   <section id="live-demo">
     <p class="demo-eyebrow">Try It — Real Data, Live</p>
     <h2>What this does</h2>
-    <p>This is a real, working lookup tool, not a screenshot or a mockup. Type a real page ID below, and it queries my actual FlyRank content-scoring data (32,954 real, already-scored pages) through a live backend function running on Netlify's servers. It returns the genuine score, reason code, and recommended action for that exact page — or an honest "not found" if the ID doesn't exist.</p>
+    <p>This is a real, working lookup tool, not a screenshot or a mockup. Type a real page ID below, it queries a static JSON file containing my actual scored data (32,954 real pages) directly in your browser — no backend, no server round-trip. It returns the genuine score, reason code, and recommended action for that exact page — or an honest "not found" if the ID doesn't exist.</p>
     <p><strong>Data used:</strong> this queries my ML-07 baseline-rule queue specifically (score = search-impression volume × a striking-distance/volume flag) — the transparent, rule-based scoring layer of my project, not yet my trained diagnosis-first model. I'm building toward wiring this same lookup to that stronger model next.</p>
     <p><strong>Note:</strong> every real match shows the same reason code and action. That's not a bug — this baseline rule is a single yes/no flag (worth reviewing, or not), so it can only ever produce one pair of labels. Only the score varies row to row. This is exactly the limitation my diagnosis-first model (4 real categories, Precision@50 0.820 vs. this rule's 0.400) was built to fix.</p>
     <p class="sample-ids">Try a real ID: <code>content_e8a52cf3d5988c07</code> or <code>content_82e35c4845e6c391</code></p>
