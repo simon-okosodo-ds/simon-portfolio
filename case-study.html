@@ -170,7 +170,7 @@
     resultBox.innerHTML = '<p style="color:#6E6E68;">Looking up real data...</p>';
 
     try {
-      const response = await fetch(`/.netlify/functions/lookup?content_id=${encodeURIComponent(contentId)}`);
+      const response = await fetch(`https://simon-okosodo-ds.netlify.app/.netlify/functions/lookup?content_id=${encodeURIComponent(contentId)}`);
       const data = await response.json();
 
       if (!data.found) {
