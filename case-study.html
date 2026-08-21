@@ -157,6 +157,21 @@
 </footer>
 
 <script>
+  let queueData = null;
+
+  // Fetch the real scoring data once, as a plain static file -- no backend,
+  // no server function, no CORS, no Netlify dependency. Served directly from
+  // its existing location in the repo. Cached by the browser after first load.
+  async function loadQueueData() {
+    if (queueData) return queueData;
+    const response = await fetch('netlify/functions/queue-data.json');
+    if (!response.ok) {
+      throw new Error(`Failed to load data file: ${response.status}`);
+    }
+    queueData = await response.json();
+    return queueData;
+  }
+
   document.getElementById('demo-button').addEventListener('click', async () => {
     const input = document.getElementById('demo-input');
     const resultBox = document.getElementById('demo-result');
@@ -170,23 +185,24 @@
     resultBox.innerHTML = '<p style="color:#6E6E68;">Looking up real data...</p>';
 
     try {
-      const response = await fetch(`https://simon-okosodo-ds.netlify.app/.netlify/functions/lookup?content_id=${encodeURIComponent(contentId)}`);
-      const data = await response.json();
+      const data = await loadQueueData();
+      const match = data[contentId];
 
-      if (!data.found) {
-        resultBox.innerHTML = `<p style="color:#6E6E68;">${data.message}</p>`;
+      if (!match) {
+        resultBox.innerHTML = `<p style="color:#6E6E68;">No match for "${contentId}". Try one of the real sample IDs above.</p>`;
         return;
       }
 
       resultBox.innerHTML = `
         <div class="result-card">
-          <p><strong>Score:</strong> ${data.score.toLocaleString()}</p>
-          <p><strong>Reason code:</strong> ${data.reason_code}</p>
-          <p><strong>Recommended action:</strong> ${data.action_label}</p>
+          <p><strong>Score:</strong> ${match.score.toLocaleString()}</p>
+          <p><strong>Reason code:</strong> ${match.reason_code}</p>
+          <p><strong>Recommended action:</strong> ${match.action_label}</p>
         </div>
       `;
     } catch (err) {
-      resultBox.innerHTML = '<p style="color:#B00020;">Something went wrong reaching the lookup service. Try again in a moment.</p>';
+      console.error(err);
+      resultBox.innerHTML = '<p style="color:#B00020;">Something went wrong loading the data file. Try again in a moment.</p>';
     }
   });
 </script>
