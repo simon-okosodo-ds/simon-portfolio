@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Capstone Notebooks — Simon Okosodo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The real capstone notebooks: data contract, leakage audit, client-grouped validation, 0.400→0.820 precision lift on 9.8M rows.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Capstone Notebooks — Simon Okosodo">
+<meta property="og:description" content="Data contract, leakage audit, client-grouped validation. Precision@50 0.400→0.820 on 9.8M real production rows. Open the notebooks →">
+<meta property="og:url" content="https://simon-okosodo-ds.github.io/simon-portfolio/notebooks.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Capstone Notebooks — Simon Okosodo">
+<meta name="twitter:description" content="Data contract, leakage audit, client-grouped validation. Precision@50 0.400→0.820 on 9.8M real production rows.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14161B; --paper:#FAF9F5; --cobalt:#2B3EFF; --muted:#6E6E68; --line: rgba(20,22,27,0.12);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{
+    background:var(--paper); color:var(--ink); font-family:'IBM Plex Sans', sans-serif;
+    display:flex; align-items:center; justify-content:center; min-height:100vh; padding:28px;
+  }
+  .card{max-width:560px; width:100%;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--cobalt);
+    margin:0 0 18px; letter-spacing:0.02em;
+  }
+  h1{
+    font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:34px;
+    line-height:1.2; letter-spacing:-0.01em; margin:0 0 18px;
+  }
+  p.lede{font-size:16px; line-height:1.6; color:#2b2d33; margin:0 0 28px;}
+  .stat-row{display:flex; gap:28px; margin:0 0 32px; flex-wrap:wrap;}
+  .stat .num{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:26px; color:var(--cobalt);}
+  .stat .lbl{font-size:12.5px; color:var(--muted); margin-top:2px;}
+  .filelist{
+    border:1px solid var(--line); border-radius:6px; padding:0; margin:0 0 32px; overflow:hidden;
+  }
+  .filelist a{
+    display:block; padding:14px 18px; text-decoration:none; color:var(--ink);
+    border-bottom:1px solid var(--line); font-size:14.5px;
+  }
+  .filelist a:last-child{border-bottom:none;}
+  .filelist a:hover{background:#F1F0EA;}
+  .filelist .fname{font-family:'IBM Plex Mono', monospace; color:var(--cobalt); margin-right:10px;}
+  .cta{
+    display:inline-block; background:var(--ink); color:var(--paper); text-decoration:none;
+    padding:16px 28px; border-radius:6px; font-family:'Space Grotesk', sans-serif; font-weight:700;
+    font-size:16px; letter-spacing:-0.01em;
+  }
+  .cta:hover{background:var(--cobalt);}
+  .footnote{font-size:13px; color:var(--muted); margin-top:18px;}
+  .footnote a{color:var(--muted);}
+</style>
+</head>
+<body>
+  <div class="card">
+    <p class="eyebrow">FlyRank ML Internship — Capstone</p>
+    <h1>The real notebooks live here.</h1>
+    <p class="lede">
+      Data contract, leakage audit, client-grouped validation — every number in my research paper
+      traces back to one of these, executed and committed, not a draft.
+    </p>
+
+    <div class="stat-row">
+      <div class="stat"><div class="num">0.400&rarr;0.820</div><div class="lbl">Precision@50, client-grouped</div></div>
+      <div class="stat"><div class="num">9.8M</div><div class="lbl">rows, real production data</div></div>
+    </div>
+
+    <div class="filelist">
+      <a href="https://github.com/simon-okosodo-ds/flyrank-ml-internship-starter/blob/main/work/notebooks/w03_data_contract.ipynb" target="_blank" rel="noopener">
+        <span class="fname">w03_data_contract.ipynb</span> — the leakage trap (0.983 honest vs 1.000 leaky)
+      </a>
+      <a href="https://github.com/simon-okosodo-ds/flyrank-ml-internship-starter/blob/main/work/notebooks/w05_model.ipynb" target="_blank" rel="noopener">
+        <span class="fname">w05_model.ipynb</span> — client-grouped vs. random split, the real validation
+      </a>
+      <a href="https://github.com/simon-okosodo-ds/flyrank-ml-internship-starter/blob/main/work/notebooks/capstone.ipynb" target="_blank" rel="noopener">
+        <span class="fname">capstone.ipynb</span> — full results, mirrors the published paper
+      </a>
+    </div>
+
+    <a class="cta" href="https://github.com/simon-okosodo-ds/flyrank-ml-internship-starter/tree/main/work/notebooks" target="_blank" rel="noopener">
+      Open the full notebooks folder
+    </a>
+
+    <p class="footnote">
+      Every notebook runs top to bottom with no errors. &middot;
+      <a href="https://simon-okosodo-ds.github.io/flyrank-ml-internship-starter/" target="_blank" rel="noopener">Read the published paper</a>
+    </p>
+  </div>
+</body>
+</html>
