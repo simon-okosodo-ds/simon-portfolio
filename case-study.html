@@ -4,22 +4,21 @@
 <meta charset="UTF-8">
 <title>Case Study — FlyRank Content Refresh | Simon Okosodo</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="FlyRank's rule-based system missed 13,775 pages (10.5%) losing clicks while impressions held steady. Here's how I found it and built a better queue.">
+<meta name="description" content="A ranking model cut wasted editor reviews from 30 to 5 per 50-page week on FlyRank's real data, and a diagnosis layer found 13,775 pages (10.5%) losing clicks while impressions held steady.">
 
-<!-- ⬇⬇ NEW — favicon -->
+<!-- favicon -->
 <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
-<!-- ⬆⬆ -->
 
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Simon Okosodo">
 <meta property="og:title" content="Case Study — FlyRank Content Refresh | Simon Okosodo">
-<meta property="og:description" content="13,775 pages (10.5%) losing clicks while impressions held steady — and none caught by the existing decline label.">
+<meta property="og:description" content="Precision@50 0.400 → 0.892 ± 0.065 (nested cross-validation) on 9.8M real rows, plus 13,775 pages (10.5%) losing clicks while impressions held steady.">
 <meta property="og:url" content="https://simon-okosodo-ds.github.io/simon-portfolio/case-study.html">
 <meta property="og:image" content="https://simon-okosodo-ds.github.io/simon-portfolio/images/diagnostic-finding.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Case Study — FlyRank Content Refresh | Simon Okosodo">
-<meta name="twitter:description" content="13,775 pages (10.5%) losing clicks while impressions held steady — and none caught by the existing decline label.">
+<meta name="twitter:description" content="Precision@50 0.400 → 0.892 ± 0.065 (nested cross-validation) on 9.8M real rows, plus 13,775 pages (10.5%) losing clicks while impressions held steady.">
 <meta name="twitter:image" content="https://simon-okosodo-ds.github.io/simon-portfolio/images/diagnostic-finding.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -60,7 +59,7 @@
   }
 </style>
 
-<!-- ⬇⬇ NEW — Google Analytics (GA4). Replace G-XXXXXXXXXX with YOUR real Measurement ID, both places. -->
+<!-- Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-N25312DDPX"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -68,7 +67,6 @@
   gtag('js', new Date());
   gtag('config', 'G-N25312DDPX');
 </script>
-<!-- ⬆⬆ -->
 
 </head>
 <body>
@@ -97,8 +95,8 @@
     <p class="demo-eyebrow">Try It — Real Data, Live</p>
     <h2>What this does</h2>
     <p>This is a real, working lookup tool, not a screenshot or a mockup. Type a real page ID below, it queries a static JSON file containing my actual scored data (32,954 real pages) directly in your browser — no backend, no server round-trip. It returns the genuine score, reason code, and recommended action for that exact page — or an honest "not found" if the ID doesn't exist.</p>
-    <p><strong>Data used:</strong> this queries my ML-07 baseline-rule queue specifically (score = search-impression volume × a striking-distance/volume flag) — the transparent, rule-based scoring layer of my project, not yet my trained diagnosis-first model. I'm building toward wiring this same lookup to that stronger model next.</p>
-    <p><strong>Note:</strong> every real match shows the same reason code and action. That's not a bug — this baseline rule is a single yes/no flag (worth reviewing, or not), so it can only ever produce one pair of labels. Only the score varies row to row. This is exactly the limitation my diagnosis-first model (4 real categories, Precision@50 0.820 vs. this rule's 0.400) was built to fix.</p>
+    <p><strong>Data used:</strong> this queries my ML-07 baseline-rule queue specifically (score = search-impression volume × a striking-distance/volume flag) — the transparent, rule-based scoring layer of my project, not my trained diagnosis-first model. That model is deployed separately as a <a href="https://flyrank-triage-api.onrender.com/docs" target="_blank" rel="noopener">live FastAPI service</a>.</p>
+    <p><strong>Note:</strong> every real match shows the same reason code and action. That's not a bug — this baseline rule is a single yes/no flag (worth reviewing, or not), so it can only ever produce one pair of labels. Only the score varies row to row. This is exactly the limitation my diagnosis-first model (4 real categories, Precision@50 0.892 ± 0.065 under nested cross-validation vs. this rule's 0.400) was built to fix.</p>
     <p class="sample-ids">Try a real ID: <code>content_e8a52cf3d5988c07</code> or <code>content_82e35c4845e6c391</code></p>
 
     <div class="demo-row">
@@ -125,10 +123,13 @@
 
   <section>
     <h2>What came of it</h2>
-    <p>13,775 pages (10.5%) show the "impressions fine, clicks falling" pattern — and none of them are caught by the existing "declining" label. That's a real gap in the current system, not a guess.</p>
+    <p><strong>The ranking.</strong> On 9.8 million rows of real production data, my Random Forest raised Precision@50 from a 0.400 rule-based baseline to <strong>0.892 ± 0.065</strong>, validated with nested cross-validation on client-grouped folds. That cuts wasted editor reviews from 30 to 5 per 50-page week, roughly 25 editor-hours freed at the same headcount. This is decision-support evidence on held-out data, not a measured result from a live rollout.</p>
+    <p><strong>The diagnosis.</strong> 13,775 pages (10.5% of 130,969 eligible) show impressions holding or growing while clicks fall — a pattern a single "declining" flag cannot separate from genuine decay, and the reason the queue carries a diagnosis as well as a rank. It is a proxy signature, not proof that Google is answering the query directly.</p>
 
-    <a href="images/diagnostic-finding.png" target="_blank" rel="noopener" class="screenshot-link"><img src="images/diagnostic-finding.png" alt="Real notebook output showing the diagnostic segment code and its result: 13,775 pages, 10.5%, 0% caught by the existing decline label" class="screenshot"></a>
+    <a href="images/diagnostic-finding.png" target="_blank" rel="noopener" class="screenshot-link"><img src="images/diagnostic-finding.png" alt="Real notebook output showing the diagnostic segment code and its result" class="screenshot"></a>
     <p class="screenshot-caption">Real notebook output — the diagnostic segment, checked directly against the data.</p>
+
+    <p>Full methodology, honest limitations and ranked recommendations: <a href="https://simon-okosodo-ds.github.io/flyrank-ml-internship-starter/" target="_blank" rel="noopener">read the research paper</a> · <a href="https://github.com/simon-okosodo-ds/flyrank-ml-internship-starter" target="_blank" rel="noopener">GitHub repo</a>.</p>
   </section>
 
   <section>
