@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Simon Okosodo — Data Science</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="I cut wasted content reviews from 60% to 11% — more than doubling the team's effective review capacity.">
+<meta name="description" content="I built a ranking model that cuts wasted content reviews from 60% to 11% on held-out data — more than doubling the team's effective review capacity.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -27,13 +27,13 @@
 
   <section>
     <p class="eyebrow">Data Science &amp; Applied ML</p>
-    <h1>I cut wasted content reviews from 60% to 11% — more than doubling the team's effective review capacity.</h1>
+    <h1>I built a ranking model that cuts wasted content reviews from 60% to 11% on held-out data — more than doubling the team's effective review capacity.</h1>
     <p class="lede">Real work on FlyRank's real search-performance data. Not a class project — a system built to fix a real, costly problem.</p>
 
     <div class="proof-strip">
       <div><span class="stat">60%</span> <span class="stat-label">wasted editor reviews, before</span></div>
       <div><span class="stat">→</span></div>
-      <div><span class="stat">11%</span> <span class="stat-label">wasted, after</span></div>
+      <div><span class="stat">11%</span> <span class="stat-label">wasted, after (held-out test)</span></div>
     </div>
   </section>
 
@@ -41,8 +41,10 @@
     <h2>Featured case</h2>
     <div class="card">
       <h3>FlyRank Content Refresh — Diagnosis Before Action</h3>
-      <p>FlyRank's system flagged "declining" pages with one blunt rule — unable to tell a page that genuinely needed a rewrite from one that was fine but just stopped getting clicks. I found a real, previously invisible pattern: 13,775 pages (10.5%) losing clicks while impressions held steady, and none of them caught by the existing label.</p>
+      <p>FlyRank's system flagged "declining" pages with one blunt rule — unable to tell a page that genuinely needed a rewrite from one that was fine but just stopped getting clicks. My model ranks pages by priority (Precision@50 0.400 → 0.892 ± 0.065, nested cross-validation) and diagnoses why: it found 13,775 pages (10.5%) losing clicks while impressions held steady, a pattern a single "declining" flag cannot separate from genuine decay.</p>
       <a href="case-study.html">Read the full case study →</a>
+      <br>
+      <a href="https://simon-okosodo-ds.github.io/flyrank-ml-internship-starter/" target="_blank" rel="noopener">Read the research paper →</a>
     </div>
   </section>
 
